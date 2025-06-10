@@ -1,61 +1,79 @@
-# 🚀 Getting started with Strapi
+# Task 2
 
-Strapi comes with a full featured [Command Line Interface](https://docs.strapi.io/dev-docs/cli) (CLI) which lets you scaffold and manage your project in seconds.
+- First we setup our strapi if its not setup using command
+> npx create-strapi@latest
 
-### `develop`
+### Dockerfile
 
-Start your Strapi application with autoReload enabled. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-develop)
-
-```
-npm run develop
-# or
-yarn develop
-```
-
-### `start`
-
-Start your Strapi application with autoReload disabled. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-start)
-
-```
-npm run start
-# or
-yarn start
+```dockerfile
+FROM node
+WORKDIR /opt/
+COPY . .
+RUN npm install -g node-gyp && npm config set fetch-retry-maxtimeout 600000 -g && npm install
+ENV PATH=./node_modules/.bin:$PATH
+RUN ["npm", "run", "build"]
+EXPOSE 1337
+CMD ["npm", "run", "develop"]
 ```
 
-### `build`
+### docker-compose.yml
 
-Build your admin panel. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-build)
+```yml
+version: '3'
+services:
+  mysql:
+    container_name: strapi_mysql
+    image: mysql:8.0
+    env_file: .env
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - ./strapi_db/backup:/var/lib/mysql
+    networks:
+      - strapi
+    ports:
+      - 3306:3306
+  
+  strapi:
+    build: .
+    container_name: strapi
+    env_file: .env
+    environment:
+      DATABASE_CLIENT: ${DATABASE_CLIENT}
+      DATABASE_HOST: ${DATABASE_HOST}
+      DATABASE_PORT: ${DATABASE_PORT}
+      DATABASE_NAME: ${DATABASE_NAME}
+      DATABASE_USERNAME: ${DATABASE_USERNAME}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      DATABASE_SSL: ${DATABASE_SSL}
+      ADMIN_JWT_SECRET: ${ADMIN_JWT_SECRET}
+      APP_KEYS: ${APP_KEYS}
+      NODE_ENV: ${NODE_ENV}
+    ports:
+      - 1337:1337
+    depends_on:
+      - mysql
+    networks:
+      - strapi
 
+networks:
+  strapi:
+    name: Strapi
+    driver: bridge
 ```
-npm run build
-# or
-yarn build
-```
 
-## ⚙️ Deployment
+### Commands used
 
-Strapi gives you many possible deployment options for your project including [Strapi Cloud](https://cloud.strapi.io). Browse the [deployment section of the documentation](https://docs.strapi.io/dev-docs/deployment) to find the best solution for your use case.
+- To run the docker compose. It will also create the image using Dockerfile
+> docker compose up -d --build
 
-```
-yarn strapi deploy
-```
+- To see the logs of the compose
+> docker compose logs -f
 
-## 📚 Learn more
+- To stop the compose 
+> docker compose stop 
 
-- [Resource center](https://strapi.io/resource-center) - Strapi resource center.
-- [Strapi documentation](https://docs.strapi.io) - Official Strapi documentation.
-- [Strapi tutorials](https://strapi.io/tutorials) - List of tutorials made by the core team and the community.
-- [Strapi blog](https://strapi.io/blog) - Official Strapi blog containing articles made by the Strapi team and the community.
-- [Changelog](https://strapi.io/changelog) - Find out about the Strapi product updates, new features and general improvements.
-
-Feel free to check out the [Strapi GitHub repository](https://github.com/strapi/strapi). Your feedback and contributions are welcome!
-
-## ✨ Community
-
-- [Discord](https://discord.strapi.io) - Come chat with the Strapi community including the core team.
-- [Forum](https://forum.strapi.io/) - Place to discuss, ask questions and find answers, show your Strapi project and get feedback or just talk with other Community members.
-- [Awesome Strapi](https://github.com/strapi/awesome-strapi) - A curated list of awesome things related to Strapi.
-
----
-
-<sub>🤫 Psst! [Strapi is hiring](https://strapi.io/careers).</sub>
