@@ -1,0 +1,6 @@
+node_modules
+README.md
+.env
+strapi_db/
+docker-compose.yml
+Dockerfile
