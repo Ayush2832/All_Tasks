@@ -1,2 +1,5 @@
 ./Task1/Strapi_ayush/.env
 ./Task2/Strapi_ayush/.env
+./Task1/Strapi_ayush/node_modules
+./Task2/Strapi_ayush/node_modules
+./Task3/Strapi_ayush/node_modules
