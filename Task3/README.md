@@ -113,8 +113,13 @@ location /{
     proxy_pass http://localhost:1337
 }
 ```
+
 <img src="./Task3_strapi/images/1.png" alt="Alt text" width="500"/>
 
 - Then we go to the browser and type localhost and it will work.
+
 <img src="./Task3_strapi/images/2.png" alt="Alt text" width="900"/>
 
+- After creating account our strapi is running successfully on `localhost/admin`
+
+<img src="./Task3_strapi/images/3.png" alt="Alt text" width="500"/>
