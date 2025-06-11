@@ -11,7 +11,7 @@ Set up a Dockerized environment with the following requirements:
 
 ## 1. Running Strapi with PostgreSQL Using Docker Networking
 - To run PostgresSQL and Strapi in same network, we can use the `docker-compose.yml`
-- First we `Dockerfile` for the Strapi
+- First we have `Dockerfile` for the Strapi
 
 ``` dockerfile
 FROM node
@@ -44,7 +44,7 @@ services:
     ports:
       - 5432:5432
 ```
-- Then we have to mention these variables in the .env file so that our Postgres container will config this at the time of creation.
+- Then we have to mention these variables in the `.env` file so that our Postgres container will config this at the time of creation.
 
 ``` yml
 # POSTGRES
@@ -95,7 +95,7 @@ DATABASE_SSL=false
 DATABASE_FILENAME=.tmp/data.db
 JWT_SECRET=EanOC7TaoUj/t/WqN/z2Rw==
 ```
-- You can also define the .dockerignore to ignore the files and folder which you dont want in the docekr image.
+- You can also define the `.dockerignore` to ignore the files and folder which you dont want in the docekr image.
 
 - Then simply run the container using the compose using 
 > docker compose up -d --build
