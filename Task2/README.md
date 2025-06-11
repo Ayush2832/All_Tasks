@@ -92,6 +92,9 @@ MYSQL_PASSWORD=mypassword
 
 ```
 
+- Now install the necassry modules for database
+> npm install pg --save
+
 - Then simply run the command 
 > docker compo up -d --build
 
