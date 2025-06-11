@@ -107,6 +107,12 @@ JWT_SECRET=EanOC7TaoUj/t/WqN/z2Rw==
 
 - Now to configure with nginx, we can change the default file of the nginx. 
 - For that we can go to `/etc/nginx/sites-available` and then `sudo vim default`
+- And then under localhost we can define proxy as 
+```bash
+location /{
+    proxy_pass http://localhost:1337
+}
+```
 <img src="./Task3_strapi/images/1.png" alt="Alt text" width="500"/>
 
 - Then we go to the browser and type localhost and it will work.
