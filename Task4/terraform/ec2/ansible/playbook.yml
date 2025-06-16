@@ -1,0 +1,77 @@
+- hosts: strapi
+  become: yes
+
+
+  tasks:
+    - name: Install dependencies
+      apt:
+        name:
+          - curl
+          - gnupg
+          - build-essential
+          - expect
+        update_cache: yes
+
+    - name: Install Node.js 
+      apt:
+        name: 
+          - nodejs
+          - npm
+        state: present
+        update_cache: yes
+
+    - name: Install pm2 globally
+      npm:
+        name: pm2
+        global: yes
+
+    - name: Create expect script to bypass Strapi prompts
+      become: true
+      copy:
+        dest: /home/ubuntu/create-strapi.expect
+        owner: ubuntu
+        group: ubuntu
+        mode: '0755'
+        content: |
+          #!/usr/bin/expect -f
+          set timeout -1
+          spawn npx create-strapi-app strapi-app --quickstart --no-run
+          expect {
+            "Ok to proceed? (y)" {
+              send "y\r"
+              exp_continue
+            }
+            "Please log in or sign up*" {
+              send "\033\[B"
+              send "\r"
+              exp_continue
+            }
+            eof
+          }
+    - name: Confirm expect script exists
+      become: true
+      stat:
+        path: /home/ubuntu/create-strapi.expect
+      register: expect_script
+
+    - name: Debug path exists
+      debug:
+       msg: "Expect script found: {{ expect_script.stat.exists }}"
+
+    - name: Run Strapi installer
+      become_user: ubuntu
+      shell: /home/ubuntu/create-strapi.expect
+
+    - name: Install Strapi dependencies
+      become_user: ubuntu
+      npm:
+        path: ~/strapi-app
+        state: present
+
+    - name: Start Strapi with pm2
+      become_user: ubuntu
+      shell: |
+        pm2 start npm --name strapi -- run dev
+        pm2 save
+      args:
+        chdir: /home/ubuntu/strapi-app

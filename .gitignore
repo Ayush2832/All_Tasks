@@ -3,3 +3,25 @@
 ./Task1/Strapi_ayush/node_modules
 ./Task2/Strapi_ayush/node_modules
 ./Task3/Strapi_ayush/node_modules
+
+# Ignore Terraform-generated files in app/terraform
+Task4/terraform/**/.terraform/
+Task4/terraform/**/*.tfstate
+Task4/terraform/**/*.tfstate.backup
+Task4/terraform/**/*.tfvars
+Task4/terraform/**/*.tfplan
+Task4/terraform/**/crash.log
+Task4/terraform/**/*_override.tf
+Task4/terraform/**/*_override.tf.json
+Task4/terraform/**/override.tf
+Task4/terraform/**/override.tf.json
+
+Task5/terraform/**/.terraform/
+Task5/terraform/**/*.tfstate
+Task5/terraform/**/*.tfstate.backup
+Task5/terraform/**/*.tfvars
+Task5/terraform/**/*.tfplan
+Task5/terraform/**/crash.log
+Task5/terraform/**/*_override.tf
+Task5/terraform/**/override.tf.json
+
